@@ -15,6 +15,12 @@ use App\Http\Controllers\BillingTypeController;
 use App\Http\Controllers\AddShortController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\AccountGroupController;
+use App\Http\Controllers\BankController;
+use App\Http\Controllers\UnitController;
+use App\Http\Controllers\HSNMasterController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PhoneDirectoryController;
 
 
 
@@ -49,8 +55,26 @@ Route::middleware(['auth'])->group(function () {
     //Add State
     Route::resource('/admin/state', StateController::class);
 
+    //Add Account Group
+    Route::resource('/admin/accountGroup', AccountGroupController::class);
+
+     //Add phone directory
+    Route::resource('/admin/phoneDirectory', PhoneDirectoryController::class);
+
     //Add Bill Type
     Route::resource('/admin/billType', BillingTypeController::class);
+
+    //Add Bank
+    Route::resource('/admin/bank', BankController::class);
+
+    //Add Unit
+    Route::resource('/admin/unit', UnitController::class);
+
+    //Add HSN Master
+    Route::resource('/admin/hsnMaster', HSNMasterController::class);
+
+    //Add Category
+    Route::resource('/admin/category', CategoryController::class);
 
     //Add Route
     Route::resource('/admin/route', RouteController::class);

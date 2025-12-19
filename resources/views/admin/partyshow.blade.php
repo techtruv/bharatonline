@@ -1,80 +1,145 @@
 @extends('layouts.app')
 @section('body')
-   <!-- Start Content-->
-  <div class="container-fluid">
+<!-- Start Content -->
+<div class="container-fluid">
+    <!-- Page Title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="form-card">
+                <div class="form-card-header">
+                    <i class="uil-users"></i>
+                    Party/Consignor Management
+                </div>
+                <div class="form-card-body" style="padding: 0.5rem 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h5 style="margin: 0; color: #166534;">
+                            <i class="uil-list"></i> Parties/Consignors List
+                        </h5>
+                        <a href="{{ route('party.create') }}" class="btn btn-primary">
+                            <i class="uil-plus-circle"></i> Add New Party/Consignor
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <!-- start page title -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box">
-                                    <h4 class="page-title">Party List</h4>
-                                    
-                                </div>
-                                </div>
-                        </div>     
-                        <!-- end page title --> 
+    <!-- Alert Messages -->
+    <div class="row">
+        <div class="col-12">
+            <x-alert />
+        </div>
+    </div>
 
-
-
-         <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <a href="{{ route('party.create') }}"><button  type="button" class="btn btn-primary right"> + Add Party</button></a>
-                                        <br>
-                                        </br>
-                                         <x-alert/>
-                                        <ul class="nav nav-tabs nav-bordered mb-3">
-                                            
-                                        </ul> <!-- end nav-->
-                                        <div class="tab-content">
-                                            <div class="tab-pane show active" id="buttons-table-preview">
-                                                <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>SN</th>
-                                                            <th>Party Name</th>
-                                                            <th>Mobile</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                
-                                                
-                                                   <tbody>
-                                                        @foreach($records as $row)
-                                                        <tr>
-                                                            <td>{{ $loop->index+1 }}</td>
-                                                            <td>{{ $row->partyName }}</td>
-                                                            <td>{{ $row->mobile }}</td>
-                                                             <td><a href="{{route('party.edit',$row->id)}}" class="btn btn-success" rel="tooltip" title="Edit">
-                                                                    <i class="mdi mdi-square-edit-outline"></i>
-                                                                </a>
-                                                                <a href="#" class="btn" rel="tooltip" title="Delete">
-                                                                
-                                                                <form action="{{route('party.destroy',$row->id)}}" method="post">
-                                                                    @csrf
-                                                                    @method('delete')
-                                                                    <button type="submit" class="btn btn-danger">
-                                                                    
-                                                                    <i class="mdi mdi-window-close" onclick="return confirm('Are you sure to Delete?')"></i>
-                                                                    </button>
-                                                                </form>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>                                           
-                                            </div> <!-- end preview-->
-                                        
-                                           
-                                        </div> <!-- end tab-content-->
-                                        
-                                    </div> <!-- end card body-->
-                                </div> <!-- end card -->
-                            </div><!-- end col-->
+    <!-- Parties Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="form-card">
+                <div class="form-card-body">
+                    <!-- Table Toolbar -->
+                    <div class="table-toolbar">
+                        <div class="search-box">
+                            <i class="uil-search"></i>
+                            <input type="text" id="tableSearch" class="form-control" placeholder="Search by name, mobile, email...">
                         </div>
-                        <!-- end row-->
+                    </div>
 
-  </div>                  
+                    <!-- Modern Table -->
+                    <div class="table-responsive">
+                        <table class="modern-table" id="partiesTable">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-column="0">
+                                        <i class="uil-hashtag"></i> S.N.
+                                    </th>
+                                    <th class="sortable" data-column="1">
+                                        <i class="uil-tag"></i> Type
+                                    </th>
+                                    <th class="sortable" data-column="2">
+                                        <i class="uil-check-circle"></i> Also Party
+                                    </th>
+                                    <th class="sortable" data-column="3">
+                                        <i class="uil-user-circle"></i> Name
+                                    </th>
+                                    <th class="sortable" data-column="4">
+                                        <i class="uil-phone"></i> Mobile
+                                    </th>
+                                    <th class="sortable" data-column="5">
+                                        <i class="uil-envelope"></i> Email
+                                    </th>
+                                    <th class="sortable" data-column="6">
+                                        <i class="uil-user"></i> Contact Person
+                                    </th>
+                                    <th class="sortable" data-column="7">
+                                        <i class="uil-barcode"></i> GST No
+                                    </th>
+                                    <th style="text-align: center;">
+                                        <i class="uil-cog"></i> Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($records as $row)
+                                <tr>
+                                    <td data-label="S.N.">{{ $loop->index+1 }}</td>
+                                    <td data-label="Type">
+                                        <span class="badge {{ $row->type == 'Consignor' ? 'bg-info' : 'bg-success' }}">
+                                            {{ $row->type }}
+                                        </span>
+                                    </td>
+                                    <td data-label="Also Party">
+                                        @if($row->is_party == 1)
+                                            <span class="badge bg-success">
+                                                <i class="uil-check-circle"></i> Yes
+                                            </span>
+                                        @else
+                                            <span class="badge bg-secondary">
+                                                <i class="uil-times-circle"></i> No
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td data-label="Name">
+                                        <strong>{{ $row->partyName }}</strong>
+                                    </td>
+                                    <td data-label="Mobile">
+                                        <span class="badge bg-light text-dark">{{ $row->mobile }}</span>
+                                    </td>
+                                    <td data-label="Email">
+                                        {{ $row->email ? $row->email : '-' }}
+                                    </td>
+                                    <td data-label="Contact Person">
+                                        {{ $row->contact_person_name ? $row->contact_person_name : '-' }}
+                                    </td>
+                                    <td data-label="GST No">
+                                        {{ $row->gst_no ? $row->gst_no : '-' }}
+                                    </td>
+                                    <td data-label="Actions" style="text-align: center;">
+                                        <a href="{{route('party.edit',$row->id)}}" class="btn btn-view" title="Edit">
+                                            <i class="uil-edit"></i>
+                                        </a>
+                                        <form action="{{route('party.destroy',$row->id)}}" method="post" style="display: inline;">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-delete" title="Delete" onclick="return confirm('Are you sure you want to delete this record?')">
+                                                <i class="uil-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="9" style="text-align: center; padding: 2rem; color: #666;">
+                                        <i class="uil-inbox" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                                        No records found. <a href="{{ route('party.create') }}" class="text-primary">Create one</a>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

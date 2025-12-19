@@ -39,12 +39,31 @@ class PartyController extends Controller
         $input = $request->all();
 
         $request->validate([
-            'partyName'=>'required|max:255',
-            'mobile'=>'required|max:10|min:10|unique:parties'
-            ]);
+            'partyName' => 'required|max:255',
+            'address' => 'nullable|max:500',
+            'phone_no' => 'nullable|max:20',
+            'mobile' => 'required|max:20|unique:parties',
+            'mobile_no' => 'nullable|max:20',
+            'contact_person_name' => 'nullable|max:255',
+            'contact_mobile_number' => 'nullable|max:20',
+            'tin_no' => 'nullable|max:50|unique:parties',
+            'gst_no' => 'nullable|max:50|unique:parties',
+            'email' => 'nullable|email|max:255'
+        ]);
 
+        // Set type as Consignor by default and is_party as 0
+        $input['type'] = 'Consignor';
+        $input['is_party'] = 0;
         $res = Party::create($input);
-        return redirect()->back()->with('success','Party added successfully');
+        
+        // Check if user wants to save as both Party and Consignor
+        if ($request->has('save_as_both') && $request->save_as_both == 1) {
+            // Update the consignor record to mark it as also a party
+            $res->update(['is_party' => 1]);
+            return redirect()->back()->with('success', 'Consignor and Party added successfully');
+        }
+        
+        return redirect()->back()->with('success', 'Consignor added successfully');
     }
 
     /**

@@ -14,6 +14,41 @@
         <link href="{{ asset('dashboard/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('dashboard/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="light-style" />
         <link href="{{ asset('dashboard/assets/css/app-dark.min.css') }}" rel="stylesheet" type="text/css" id="dark-style" />
+        
+        <!-- Navbar css -->
+        <link href="{{ asset('dashboard/assets/css/navbar.css') }}" rel="stylesheet" type="text/css" />
+        
+        <!-- Modern Forms CSS -->
+        <link href="{{ asset('dashboard/assets/css/modern-forms.css') }}" rel="stylesheet" type="text/css" />
+        
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            
+            .main-content {
+                min-height: calc(100vh - 120px);
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+                background-color: #f5f7fa;
+            }
+            
+            .main-content > .container-fluid {
+                padding: 0 1rem;
+            }
+            
+            @media (max-width: 768px) {
+                .main-content {
+                    padding-top: 1rem;
+                    padding-bottom: 1rem;
+                }
+                
+                .main-content > .container-fluid {
+                    padding: 0 0.5rem;
+                }
+            }
+        </style>
 
                 <!-- third party css -->
         <link href="{{ asset('dashboard/assets/css/vendor/dataTables.bootstrap4.css') }}" rel="stylesheet" type="text/css" />
@@ -29,39 +64,24 @@
 
         <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
         <!-- Begin page -->
-   <div class="wrapper" style=" overflow: scroll;">
-        @include('layouts.sidebar')
-  <div class="content-page" style=" overflow: scroll;">
-      @include('layouts.topbar')
-      @yield('body')
-    </div>
-
-
-                </div> <!-- content -->
-
-                <!-- Footer Start -->
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <script>document.write(new Date().getFullYear())</script> © Tarachand Patel - +91 9584587577
-                            </div>
-
-                        </div>
-                    </div>
-                </footer>
-                <!-- end Footer -->
-
-            </div>
-
-
-
-
+        @include('layouts.navbar')
+        
+        <div class="main-content">
+            @yield('body')
         </div>
 
+        <!-- Footer Start -->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <script>document.write(new Date().getFullYear())</script> © Tarachand Patel - +91 9584587577
+                    </div>
 
-      <div class="rightbar-overlay"></div>
-        <!-- /End-bar -->
+                </div>
+            </div>
+        </footer>
+        <!-- end Footer -->
 
         <!-- bundle -->
         <script src="{{ asset('dashboard/assets/js/vendor.min.js') }}"></script>
@@ -97,6 +117,10 @@
         <!-- demo app -->
         <script src="{{ asset('dashboard/assets/js/pages/demo.datatable-init.js') }}"></script>
         <!-- end demo js-->
+        
+        <!-- Navbar JavaScript -->
+        <script src="{{ asset('dashboard/assets/js/navbar.js') }}"></script>
+        
         @yield('java_script')
 
         <script type="text/javascript">
