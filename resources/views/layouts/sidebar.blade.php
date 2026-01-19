@@ -104,6 +104,13 @@
                                          </a>
                                     </li>
 
+                                    <li>
+                                        <a href="{{ route('voucherEntryType.index') }}">
+                                        <i class="uil-calender"></i>
+                                         <span>Add Voucher Entry Type</span>
+                                         </a>
+                                    </li>
+
                                 </ul>
                             </div>
                         </li>

@@ -6,7 +6,21 @@
 
 <div class="dashboard-container">
     <div class="container-fluid">
-       
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="dashboard-header">
+                    <h1>
+                        <i class="uil-receipt"></i>
+                        Voucher Entry Types
+                    </h1>
+                    <p class="dashboard-subtitle">
+                        <i class="uil-info-circle me-1"></i>
+                        Manage voucher entry types with code and name
+                    </p>
+                </div>
+            </div>
+        </div>
 
         <!-- Alert Messages -->
         <div class="row mb-3">
@@ -22,34 +36,34 @@
                     <div class="form-card-header">
                         <h5 class="form-card-title">
                             <i class="uil-plus-circle me-2"></i>
-                            {{ isset($data) ? 'Edit Account Group' : 'Add New Account Group' }}
+                            {{ isset($data) ? 'Edit Voucher Entry Type' : 'Add New Voucher Entry Type' }}
                         </h5>
                     </div>
 
                     <div class="form-card-body">
                         @if(isset($data))
-                            <form action="{{ route('accountGroup.update', $data->id) }}" method="POST">
+                            <form action="{{ route('voucherEntryType.update', $data->id) }}" method="POST">
                             @method('PATCH')
                         @else
-                            <form action="{{ route('accountGroup.store') }}" method="POST">
+                            <form action="{{ route('voucherEntryType.store') }}" method="POST">
                         @endif
                             @csrf
 
                             <div class="row g-3">
                                 <!-- Code Field -->
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-section">
                                         <label for="code" class="form-label">
                                             <i class="uil-barcode me-2"></i>
                                             Code
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control @error('code') is-invalid @enderror" 
-                                            id="code" 
-                                            name="code" 
-                                            placeholder="Enter code (e.g., AG001)"
+                                        <input
+                                            type="text"
+                                            class="form-control @error('code') is-invalid @enderror"
+                                            id="code"
+                                            name="code"
+                                            placeholder="Enter code (e.g., VET001)"
                                             value="{{ old('code', isset($data->code) ? $data->code : '') }}"
                                             required
                                         >
@@ -62,56 +76,24 @@
                                     </div>
                                 </div>
 
-                                <!-- Group Name Field -->
-                                <div class="col-md-4">
+                                <!-- Name Field -->
+                                <div class="col-md-6">
                                     <div class="form-section">
-                                        <label for="group_name" class="form-label">
-                                            <i class="uil-folder me-2"></i>
-                                            Group Name
+                                        <label for="name" class="form-label">
+                                            <i class="uil-tag me-2"></i>
+                                            Name
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control @error('group_name') is-invalid @enderror" 
-                                            id="group_name" 
-                                            name="group_name" 
-                                            placeholder="Enter group name"
-                                            value="{{ old('group_name', isset($data->group_name) ? $data->group_name : '') }}"
+                                        <input
+                                            type="text"
+                                            class="form-control @error('name') is-invalid @enderror"
+                                            id="name"
+                                            name="name"
+                                            placeholder="Enter name"
+                                            value="{{ old('name', isset($data->name) ? $data->name : '') }}"
                                             required
                                         >
-                                        @error('group_name')
-                                            <div class="invalid-feedback">
-                                                <i class="uil-info-circle me-1"></i>
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <!-- Under Group Select -->
-                                <div class="col-md-4">
-                                    <div class="form-section">
-                                        <label for="under_group_id" class="form-label">
-                                            <i class="uil-sitemap me-2"></i>
-                                            Under Group
-                                            <span class="text-muted">(Optional)</span>
-                                        </label>
-                                        <select 
-                                            class="form-control @error('under_group_id') is-invalid @enderror" 
-                                            id="under_group_id" 
-                                            name="under_group_id"
-                                        >
-                                            <option value="">-- Select Parent Group --</option>
-                                            @foreach($parentGroups as $group)
-                                                <option 
-                                                    value="{{ $group->id }}"
-                                                    @if(old('under_group_id', isset($data->under_group_id) ? $data->under_group_id : '') == $group->id) selected @endif
-                                                >
-                                                    {{ $group->code }} - {{ $group->group_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('under_group_id')
+                                        @error('name')
                                             <div class="invalid-feedback">
                                                 <i class="uil-info-circle me-1"></i>
                                                 {{ $message }}
@@ -126,10 +108,10 @@
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="uil-check me-1"></i>
-                                        {{ isset($data) ? 'Update Group' : 'Add Group' }}
+                                        {{ isset($data) ? 'Update Type' : 'Add Type' }}
                                     </button>
                                     @if(isset($data))
-                                        <a href="{{ route('accountGroup.index') }}" class="btn btn-secondary">
+                                        <a href="{{ route('voucherEntryType.index') }}" class="btn btn-secondary">
                                             <i class="uil-arrow-left me-1"></i>
                                             Back to List
                                         </a>
@@ -142,14 +124,14 @@
             </div>
         </div>
 
-        <!-- Account Groups Table Section -->
+        <!-- Voucher Entry Types Table Section -->
         <div class="row">
             <div class="col-12">
                 <div class="form-card">
                     <div class="form-card-header">
                         <h5 class="form-card-title">
                             <i class="uil-list-ul me-2"></i>
-                            Account Groups List
+                            Voucher Entry Types List
                         </h5>
                     </div>
 
@@ -168,12 +150,8 @@
                                                 Code
                                             </th>
                                             <th>
-                                                <i class="uil-folder me-1"></i>
-                                                Group Name
-                                            </th>
-                                            <th>
-                                                <i class="uil-sitemap me-1"></i>
-                                                Under Group
+                                                <i class="uil-tag me-1"></i>
+                                                Name
                                             </th>
                                             <th>
                                                 <i class="uil-clock-eight me-1"></i>
@@ -192,17 +170,8 @@
                                                 <td data-label="Code">
                                                     <span class="badge bg-info">{{ $row->code }}</span>
                                                 </td>
-                                                <td data-label="Group Name">
-                                                    <strong>{{ $row->group_name }}</strong>
-                                                </td>
-                                                <td data-label="Under Group">
-                                                    @if($row->parentGroup)
-                                                        <span class="badge bg-secondary">
-                                                            {{ $row->parentGroup->code }} - {{ $row->parentGroup->group_name }}
-                                                        </span>
-                                                    @else
-                                                        <span class="text-muted">-</span>
-                                                    @endif
+                                                <td data-label="Name">
+                                                    <strong>{{ $row->name }}</strong>
                                                 </td>
                                                 <td data-label="Created Date">
                                                     <small class="text-muted">
@@ -212,11 +181,11 @@
                                                 </td>
                                                 <td class="text-center" data-label="Actions">
                                                     <div class="action-buttons">
-                                                        <a href="{{ route('accountGroup.edit', $row->id) }}" class="btn btn-sm btn-edit">
+                                                        <a href="{{ route('voucherEntryType.edit', $row->id) }}" class="btn btn-sm btn-edit">
                                                             <i class="uil-edit"></i>
                                                             <span class="d-none d-md-inline">Edit</span>
                                                         </a>
-                                                        <form action="{{ route('accountGroup.destroy', $row->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this account group?');">
+                                                        <form action="{{ route('voucherEntryType.destroy', $row->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this voucher entry type?');">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-delete">
@@ -229,11 +198,11 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="6" class="text-center py-4">
+                                                <td colspan="5" class="text-center py-4">
                                                     <div class="empty-state">
                                                         <i class="uil-inbox"></i>
-                                                        <p class="mt-2">No account groups found</p>
-                                                        <small class="text-muted">Start by adding your first account group above</small>
+                                                        <p class="mt-2">No voucher entry types found</p>
+                                                        <small class="text-muted">Start by adding your first voucher entry type above</small>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -244,8 +213,8 @@
                         @else
                             <div class="empty-state">
                                 <i class="uil-inbox"></i>
-                                <h5>No Account Groups Yet</h5>
-                                <p class="text-muted">There are no account groups created yet. Create your first one using the form above.</p>
+                                <h5>No Voucher Entry Types Yet</h5>
+                                <p class="text-muted">There are no voucher entry types created yet. Create your first one using the form above.</p>
                             </div>
                         @endif
                     </div>
@@ -256,7 +225,7 @@
 </div>
 
 <style>
-    /* Additional styling for account group view */
+    /* Additional styling for voucher entry type view */
     .empty-state {
         text-align: center;
         padding: 40px 20px;
@@ -323,10 +292,6 @@
 
     .badge.bg-info {
         background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
-    }
-
-    .badge.bg-secondary {
-        background: linear-gradient(135deg, #6b7280, #4b5563) !important;
     }
 
     @media (max-width: 768px) {

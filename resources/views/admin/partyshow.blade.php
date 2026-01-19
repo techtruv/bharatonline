@@ -6,15 +6,14 @@
     <div class="row">
         <div class="col-12">
             <div class="form-card">
-                <div class="form-card-header">
-                    <i class="uil-users"></i>
-                    Party/Consignor Management
-                </div>
+                
                 <div class="form-card-body" style="padding: 0.5rem 1rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h5 style="margin: 0; color: #166534;">
-                            <i class="uil-list"></i> Parties/Consignors List
-                        </h5>
+                        
+                        <div class="form-card-header">
+                            <i class="uil-list"></i>
+                            Party/Consignor List
+                        </div>
                         <a href="{{ route('party.create') }}" class="btn btn-primary">
                             <i class="uil-plus-circle"></i> Add New Party/Consignor
                         </a>

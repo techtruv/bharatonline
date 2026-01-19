@@ -21,6 +21,9 @@
         <!-- Modern Forms CSS -->
         <link href="{{ asset('dashboard/assets/css/modern-forms.css') }}" rel="stylesheet" type="text/css" />
         
+        <!-- Select2 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
+        
         <style>
             body {
                 margin: 0;
@@ -85,7 +88,6 @@
 
         <!-- bundle -->
         <script src="{{ asset('dashboard/assets/js/vendor.min.js') }}"></script>
-        <script src="{{ asset('dashboard/assets/js/vendor.min.js.map') }}"></script>
         <script src="{{ asset('dashboard/assets/js/app.min.js') }}"></script>
 
         <!-- third party js -->
@@ -97,7 +99,19 @@
         <!-- demo app -->
         <script src="{{ asset('dashboard/assets/js/pages/demo.dashboard.js') }}"></script>
         <!-- end demo js-->
-
+        
+        <!-- Prevent dashboard initialization on non-dashboard pages -->
+        <script>
+            if (typeof Dashboard !== 'undefined') {
+                var originalInit = Dashboard.init;
+                Dashboard.init = function() {
+                    // Only run dashboard initialization on pages with dashboard elements
+                    if ($('#dash-daterange, #revenue-chart, #high-performing-product, #average-sales').length > 0) {
+                        originalInit.call(this);
+                    }
+                };
+            }
+        </script>
 
         <!-- third party js -->
         <script src="{{ asset('dashboard/assets/js/vendor/jquery.dataTables.min.js') }}"></script>
@@ -124,11 +138,29 @@
         @yield('java_script')
 
         <script type="text/javascript">
-            // In your Javascript (external .js resource or <script> tag)
+            // Initialize Select2 on ready
             $(document).ready(function() {
-                $('.js-example-basic-single').select2();
+                // Initialize Select2 for single select
+                if (typeof jQuery !== 'undefined') {
+                    $('.js-example-basic-single').select2();
+                }
+                
+                // Wrap ApexCharts initialization to handle missing elements gracefully
+                if (typeof Dashboard !== 'undefined' && Dashboard.initCharts) {
+                    try {
+                        // Only initialize charts if we have the dashboard page
+                        var chartsExist = $('#revenue-chart').length > 0 || 
+                                        $('#high-performing-product').length > 0 || 
+                                        $('#average-sales').length > 0;
+                        
+                        if (chartsExist) {
+                            Dashboard.initCharts();
+                        }
+                    } catch (e) {
+                        console.warn('ApexCharts initialization warning:', e.message);
+                    }
+                }
             });
-            //Fetch Supplier List
         </script>
     </body>
 

@@ -2,42 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HSNMaster;
+use App\Models\HsnMaster;
 use Illuminate\Http\Request;
 
 class HSNMasterController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Display a listing of HSN Masters
      */
-    public function index()
+    public function index(Request $request)
     {
-        $records = HSNMaster::orderBy('id', 'DESC')->get();
-        return view('admin.hsnMaster', compact('records'));
+        $query = HsnMaster::query();
+
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $query->search($request->search);
+        }
+
+        // Pagination
+        $hsnMasters = $query->orderBy('hsn_code')->paginate(50);
+
+        return view('admin.hsnMaster', [
+            'hsnMasters' => $hsnMasters,
+            'searchTerm' => $request->input('search'),
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new HSN Master
      */
     public function create()
     {
-        //
+        return view('admin.hsn_form', [
+            'isEdit' => false,
+            'hsnMaster' => null
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Store a newly created HSN Master in storage
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'hsn_code' => 'required|string|max:255|unique:hsn_masters',
+        // Validation
+        $validated = $request->validate([
+            'hsn_code' => 'required|string|max:255|unique:hsn_masters,hsn_code',
             'type' => 'required|string|max:255',
             'commodity' => 'required|string|max:255',
             'sgst_percent' => 'required|numeric|min:0|max:100',
@@ -45,47 +54,32 @@ class HSNMasterController extends Controller
             'igst_percent' => 'required|numeric|min:0|max:100',
         ]);
 
-        $input = $request->all();
-        $res = HSNMaster::create($input);
+        // Create HSN Master
+        HsnMaster::create($validated);
 
-        return redirect()->back()->with('success', 'HSN Master Added Successfully');
+        return redirect()->route('hsnMaster.index')
+            ->with('success', 'HSN Master created successfully!');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\HSNMaster  $hsnMaster
-     * @return \Illuminate\Http\Response
+     * Show the form for editing the specified HSN Master
      */
-    public function show(HSNMaster $hsnMaster)
+    public function edit(HsnMaster $hsnMaster)
     {
-        //
+        return view('admin.hsn_form', [
+            'isEdit' => true,
+            'hsnMaster' => $hsnMaster
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  $id
-     * @return \Illuminate\Http\Response
+     * Update the specified HSN Master in storage
      */
-    public function edit($id)
+    public function update(Request $request, HsnMaster $hsnMaster)
     {
-        $records = HSNMaster::orderBy('id', 'DESC')->get();
-        $data = HSNMaster::find($id);
-        return view('admin.hsnMaster', compact('records', 'data'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'hsn_code' => 'required|string|max:255|unique:hsn_masters,hsn_code,' . $id,
+        // Validation - exclude current record from unique check
+        $validated = $request->validate([
+            'hsn_code' => 'required|string|max:255|unique:hsn_masters,hsn_code,' . $hsnMaster->id,
             'type' => 'required|string|max:255',
             'commodity' => 'required|string|max:255',
             'sgst_percent' => 'required|numeric|min:0|max:100',
@@ -93,24 +87,116 @@ class HSNMasterController extends Controller
             'igst_percent' => 'required|numeric|min:0|max:100',
         ]);
 
-        $input = $request->all();
+        // Update HSN Master
+        $hsnMaster->update($validated);
 
-        unset($input['_method']);
-        unset($input['_token']);
-        $res = HSNMaster::where('id', $id)->update($input);
-
-        return redirect(route('hsnMaster.index'))->with('success', 'HSN Master Updated Successfully');
+        return redirect()->route('hsnMaster.index')
+            ->with('success', 'HSN Master updated successfully!');
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  $id
-     * @return \Illuminate\Http\Response
+     * Remove the specified HSN Master from storage
      */
-    public function destroy($id)
+    public function destroy(HsnMaster $hsnMaster)
     {
-        $res = HSNMaster::find($id)->delete();
-        return redirect()->back()->with('success', 'HSN Master Deleted Successfully');
+        try {
+            $hsnMaster->delete();
+
+            return redirect()->route('hsnMaster.index')
+                ->with('success', 'HSN Master deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error deleting HSN Master: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * AJAX endpoint: Get HSN Master by code
+     */
+    public function getByCode($code)
+    {
+        $hsn = HsnMaster::where('hsn_code', $code)->first();
+
+        if (!$hsn) {
+            return response()->json([
+                'success' => false,
+                'message' => 'HSN code not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $hsn->id,
+                'hsn_code' => $hsn->hsn_code,
+                'commodity_name' => $hsn->commodity_name,
+                'sgst_rate' => $hsn->sgst_rate,
+                'cgst_rate' => $hsn->cgst_rate,
+                'igst_rate' => $hsn->igst_rate,
+                'cess_rate' => $hsn->cess_rate,
+                'total_tax_rate' => $hsn->total_tax_rate,
+                'is_exempted' => $hsn->is_exempted,
+                'is_nil_rated' => $hsn->is_nil_rated,
+            ]
+        ]);
+    }
+
+    /**
+     * AJAX endpoint: Get HSN Masters by type
+     */
+    public function getByType($type)
+    {
+        $hsnMasters = HsnMaster::byType($type)->active()->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $hsnMasters->map(function ($hsn) {
+                return [
+                    'id' => $hsn->id,
+                    'hsn_code' => $hsn->hsn_code,
+                    'commodity_name' => $hsn->commodity_name,
+                    'formatted_tax' => $hsn->formatted_tax,
+                ];
+            })
+        ]);
+    }
+
+    /**
+     * AJAX endpoint: Calculate tax amount
+     */
+    public function calculateTax(Request $request)
+    {
+        $request->validate([
+            'hsn_id' => 'required|exists:hsn_masters,id',
+            'amount' => 'required|numeric|min:0',
+            'tax_type' => 'nullable|in:SGST,CGST,IGST,TOTAL_GST'
+        ]);
+
+        $hsn = HsnMaster::findOrFail($request->hsn_id);
+        $amount = $request->amount;
+        $taxType = $request->tax_type ?? 'TOTAL_GST';
+
+        if (!$hsn->isTaxable()) {
+            return response()->json([
+                'success' => true,
+                'tax_amount' => 0,
+                'total_amount' => $amount,
+                'message' => 'This HSN is tax exempted'
+            ]);
+        }
+
+        $taxRate = $hsn->getTaxRateByType($taxType) / 100;
+        $taxAmount = $amount * $taxRate;
+        $totalAmount = $amount + $taxAmount;
+
+        return response()->json([
+            'success' => true,
+            'amount' => $amount,
+            'tax_rate' => $hsn->getTaxRateByType($taxType),
+            'tax_amount' => round($taxAmount, 2),
+            'total_amount' => round($totalAmount, 2),
+            'is_exempted' => $hsn->is_exempted,
+            'is_nil_rated' => $hsn->is_nil_rated,
+        ]);
     }
 }

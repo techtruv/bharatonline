@@ -21,6 +21,8 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\HSNMasterController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PhoneDirectoryController;
+use App\Http\Controllers\LedgerMasterController;
+use App\Http\Controllers\VoucherEntryTypeController;
 
 
 
@@ -69,6 +71,14 @@ Route::middleware(['auth'])->group(function () {
 
     //Add Unit
     Route::resource('/admin/unit', UnitController::class);
+
+    //Add Ledger Master
+    Route::resource('/admin/ledgerMaster', LedgerMasterController::class);
+    Route::post('/admin/ledgerMaster/verify-gst', [LedgerMasterController::class, 'verifyGst'])->name('ledgerMaster.verifyGst');
+    Route::get('/admin/ledgerMaster/get-by-type/{type}', [LedgerMasterController::class, 'getByType'])->name('ledgerMaster.getByType');
+
+    //Add Voucher Entry Type
+    Route::resource('/admin/voucherEntryType', VoucherEntryTypeController::class);
 
     //Add HSN Master
     Route::resource('/admin/hsnMaster', HSNMasterController::class);

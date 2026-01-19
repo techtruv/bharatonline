@@ -21,7 +21,9 @@ class AdminController extends Controller
         if(isset(Auth::user()->id)){
             return redirect(route('trips.indexAll',1));
         }else{
-            return view('login'); 
+            // Fetch all sessions from database
+            $sessions = \App\Models\Session::orderBy('from_date', 'DESC')->get();
+            return view('login', compact('sessions')); 
         }
     }
     
@@ -31,7 +33,9 @@ class AdminController extends Controller
         if(isset(Auth::user()->id)){
             return redirect(route('trips.indexAll',1));
         }else{
-            return view('login'); 
+            // Fetch all sessions from database
+            $sessions = \App\Models\Session::orderBy('from_date', 'DESC')->get();
+            return view('login', compact('sessions')); 
         }
     }
     //end login page
@@ -44,6 +48,7 @@ class AdminController extends Controller
             [
                 'email' => 'required|email|max:255',
                 'password' => 'required',
+                'session_id' => 'required|exists:sessionns,id',
             ]);
 
         if ($validator->fails()) {
@@ -52,22 +57,64 @@ class AdminController extends Controller
                 ->withInput();
         }
 
+
+        // Validate session exists and is active
+        $session = \App\Models\Session::find($request->session_id);
+        if (!$session) {
+            return redirect()->back()
+                ->with('error', 'Invalid session selected.')
+                ->withInput();
+        }
+
+        // Check if session is within valid date range
+        $today = now()->toDateString();
+        if ($today < $session->from_date || $today > $session->to_date) {
+            return redirect()->back()
+                ->with('error', 'Selected session is not active. Please choose an active session.')
+                ->withInput();
+        }
+
+        // Attempt login
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            Session::put('id', $user->id);
+            
+            // Store session information in session
+            session()->put('user_id', $user->id);
+            session()->put('user_email', $user->email);
+            session()->put('session_id', $session->id);
+            session()->put('session_name', $session->session_name);
+            session()->put('session_from', $session->from_date);
+            session()->put('session_to', $session->to_date);
+            session()->put('login_time', now());
+            
+            // Regenerate session ID for security
+            session()->regenerate();
+            
+            // Log login activity
+            $this->logLoginActivity($user, $session);
+            
             return redirect(route('trips.index'));
-            $count = $user->count();
-            if ($count != 0) {
-                Session::put('id', $user->id);
-                return redirect(route('trips.indexAll',1));
-            } else {
-                return redirect()->back()->with('error', 'Email and Password does not match.');
-            }
 
-        }else {
-                return redirect()->back()->with('error', 'Email and Password does not match.');
-            }
+        } else {
+            return redirect()->back()
+                ->with('error', 'Email and Password does not match.')
+                ->withInput(['email' => $request->email]);
+        }
+    }
 
+    // Log login activity
+    private function logLoginActivity($user, $session)
+    {
+        // Log to activity table (optional)
+        // You can uncomment this if you have an activity_logs table
+        // ActivityLog::create([
+        //     'user_id' => $user->id,
+        //     'session_id' => $session->id,
+        //     'action' => 'login',
+        //     'ip_address' => request()->ip(),
+        //     'user_agent' => request()->userAgent(),
+        //     'timestamp' => now()
+        // ]);
     }
     //End login request
 

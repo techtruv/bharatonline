@@ -26,7 +26,7 @@
 
                 <!-- Master Dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ request()->segment(3) === 'session' || request()->segment(3) === 'party' || request()->segment(3) === 'supplier' || request()->segment(3) === 'driver' || request()->segment(3) === 'vehicleType' || request()->segment(3) === 'billType' || request()->segment(3) === 'vehicle' || request()->segment(3) === 'state' || request()->segment(3) === 'route' || request()->segment(3) === 'bank' || request()->segment(3) === 'unit' || request()->segment(3) === 'category' || request()->segment(3) === 'hsnMaster' ? 'active' : '' }}" 
+                    <a class="nav-link dropdown-toggle {{ request()->segment(3) === 'session' || request()->segment(3) === 'party' || request()->segment(3) === 'supplier' || request()->segment(3) === 'driver' || request()->segment(3) === 'vehicleType' || request()->segment(3) === 'billType' || request()->segment(3) === 'vehicle' || request()->segment(3) === 'state' || request()->segment(3) === 'route' || request()->segment(3) === 'bank' || request()->segment(3) === 'unit' || request()->segment(3) === 'category' || request()->segment(3) === 'hsnMaster' || request()->segment(3) === 'ledgerMaster' ? 'active' : '' }}" 
                        href="#" id="masterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="uil-store me-1"></i>
                         <span>Master</span>
@@ -92,7 +92,12 @@
                                 <i class="uil-building me-2"></i>Add Bank
                             </a>
                         </li>
-                       
+                        <li>
+                            <a class="dropdown-item {{ request()->route()->getName() === 'ledgerMaster.index' ? 'active' : '' }}" 
+                               href="{{ route('ledgerMaster.index') }}">
+                                <i class="uil-book-open me-2"></i>Ledger Master
+                            </a>
+                        </li>
                         
                         <li>
                             <a class="dropdown-item {{ request()->route()->getName() === 'vehicle.index' ? 'active' : '' }}" 
@@ -124,6 +129,14 @@
                                 <i class="uil-barcode-read me-2"></i>HSN Master
                             </a>
                         </li>
+
+                        <li>
+                                        <a class="dropdown-item {{ request()->route()->getName() === 'voucherEntryType.index' ? 'active' : '' }}"
+                                             href="{{ route('voucherEntryType.index') }}">
+                                        <i class="uil-calender"></i>
+                                         <span>Add Voucher Entry Type</span>
+                                         </a>
+                                    </li>
                     </ul>
                 </li>
 

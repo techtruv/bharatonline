@@ -1,85 +1,231 @@
-@extends('layouts.login-app')
-@section('body')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bharat Online - Login</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- UIL Icons -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    
+    <!-- Google reCAPTCHA v3 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
+    <!-- Custom Login Styles -->
+    <link rel="stylesheet" href="{{ asset('dashboard/assets/css/login-styles.css') }}">
+    
+    <style>
+        html, body {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="login-card">
+            <!-- Header with Logo -->
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="uil uil-truck-side"></i>
+                </div>
+                <h1 class="login-title">Bharat Online</h1>
+                <p class="login-subtitle">Transport & Logistics Management</p>
+            </div>
 
-     <div class="auth-fluid">
-            <!--Auth fluid left content -->
-            <div class="auth-fluid-form-box">
-                <div class="align-items-center d-flex h-100">
-                    <div class="card-body">
-
-                        <!-- Logo -->
-                        <div class="auth-brand text-center text-lg-start">
-                            <a href="{{ route('login') }}" class="logo-dark">
-                                <h4>TruckBook</h4>
-                            </a>
-                            
-                           
+            <!-- Login Form -->
+            <div class="login-form">
+                <!-- Alert Messages -->
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <i class="uil uil-exclamation-circle"></i>
+                        <div>
+                            <strong>Login Failed!</strong>
+                            @foreach ($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
                         </div>
-                        <x-alert />
-                        <!-- title-->
-                        <h4 class="mt-0">Sign In</h4>
-                       
-                        <!-- form -->
-                        <form action="{{ route('loginPost') }}" method="post" >
-                        @csrf
-                            <div class="mb-3">
-                                <label for="emailaddress" class="form-label">Email address</label>
-                                <input class="form-control" type="email" id="email" name="email" required="" placeholder="Enter your email">
-                            </div>
-                            <div class="mb-3">
-                                <a href="pages-recoverpw-2.html" class="text-muted float-end">
-                                <!-- <small>Forgot your password?</small> -->
-                                </a>
-                                <label for="password" class="form-label">Password</label>
-                                <input class="form-control" type="password" name="password" required="" id="password" placeholder="Enter your password">
-                            </div>
-                            <!-- <div class="mb-3">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="checkbox-signin">
-                                    <label class="form-check-label" for="checkbox-signin">Remember me</label>
-                                </div>
-                            </div> -->
-                            <div class="d-grid mb-0 text-center">
-                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-login"></i> Log In </button>
-                            </div>
-                            <!-- social-->
-                            <!-- <div class="text-center mt-4">
-                                <p class="text-muted font-16">Sign in with</p>
-                                <ul class="social-list list-inline mt-3">
-                                    <li class="list-inline-item">
-                                        <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
-                                    </li>
-                                </ul>
-                            </div> -->
-                        </form>
-                        <!-- end form-->
+                    </div>
+                @endif
 
-                        <!-- Footer-->
-                        <!-- <footer class="footer footer-alt">
-                            <p class="text-muted">Don't have an account? <a href="pages-register-2.html" class="text-muted ms-1"><b>Sign Up</b></a></p>
-                        </footer> -->
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        <i class="uil uil-check-circle"></i>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                @endif
 
-                    </div> <!-- end .card-body -->
-                </div> <!-- end .align-items-center.d-flex.h-100-->
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        <i class="uil uil-exclamation-circle"></i>
+                        <span>{{ session('error') }}</span>
+                    </div>
+                @endif
+
+                <!-- Login Form -->
+                <form action="{{ route('loginPost') }}" method="POST" id="loginForm">
+                    @csrf
+
+                    <!-- Session Warning (if exists) -->
+                    @if (session('session_warning'))
+                        <div class="alert alert-warning" role="alert">
+                            <i class="uil uil-info-circle"></i>
+                            <strong>Session Timeout!</strong> Your session expired. Please login again.
+                        </div>
+                    @endif
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="uil uil-envelope"></i>
+                            Email Address
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-control @error('email') is-invalid @enderror" 
+                            placeholder="Enter your email address"
+                            value="{{ old('email') }}"
+                            required
+                            autofocus
+                        >
+                        @error('email')
+                            <div class="invalid-feedback">
+                                <i class="uil uil-info-circle"></i>
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="uil uil-lock"></i>
+                            Password
+                        </label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-control @error('password') is-invalid @enderror" 
+                            placeholder="Enter your password"
+                            required
+                        >
+                        @error('password')
+                            <div class="invalid-feedback">
+                                <i class="uil uil-info-circle"></i>
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
+
+                    <!-- Session Selection -->
+                    <div class="form-group">
+                        <label for="session_id" class="form-label">
+                            <i class="uil uil-calendar-alt"></i>
+                            Select Session
+                        </label>
+                        <select 
+                            id="session_id" 
+                            name="session_id" 
+                            class="form-control @error('session_id') is-invalid @enderror"
+                            required
+                        >
+                            <option value="">-- Choose a session --</option>
+                            @if(isset($sessions) && count($sessions) > 0)
+                                @foreach($sessions as $session)
+                                    <option value="{{ $session->id }}" 
+                                        {{ old('session_id') == $session->id ? 'selected' : '' }}>
+                                        {{ $session->session_name }} 
+                                        ({{ date('M d, Y', strtotime($session->from_date)) }} - {{ date('M d, Y', strtotime($session->to_date)) }})
+                                    </option>
+                                @endforeach
+                            @else
+                                <option value="" disabled>No sessions available</option>
+                            @endif
+                        </select>
+                        @error('session_id')
+                            <div class="invalid-feedback d-block">
+                                <i class="uil uil-info-circle"></i>
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <label class="remember-me">
+                            <input type="checkbox" name="remember" id="remember">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="login-btn">
+                        <i class="uil uil-sign-in-alt"></i>
+                        Sign In
+                    </button>
+                </form>
             </div>
-            <!-- end auth-fluid-form-box-->
 
-            <!-- Auth fluid right content -->
-            <div class="auth-fluid-right text-center">
-                <div class="auth-user-testimonial">
-                    
-                </div> <!-- end auth-user-testimonial-->
+            <!-- Footer with Signup Link -->
+            <div class="signup-link">
+                Don't have an account? <a href="{{ route('register') }}">Create one now</a>
             </div>
-            <!-- end Auth fluid right content -->
         </div>
+    </div>
 
-@endsection
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Form validation on submit
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const sessionId = document.getElementById('session_id').value.trim();
+
+            // Check all fields
+            if (!email || !password || !sessionId) {
+                e.preventDefault();
+                alert('Please fill in all fields');
+                return false;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                e.preventDefault();
+                document.getElementById('email').classList.add('is-invalid');
+                return false;
+            }
+        });
+
+        // Clear error class on input
+        document.getElementById('email').addEventListener('input', function() {
+            this.classList.remove('is-invalid');
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            this.classList.remove('is-invalid');
+        });
+
+        document.getElementById('session_id').addEventListener('change', function() {
+            this.classList.remove('is-invalid');
+        });
+
+        // Show/Hide password toggle (optional)
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+        }
+    </script>
+</body>
+</html>
