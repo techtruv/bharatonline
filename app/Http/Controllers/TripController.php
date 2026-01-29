@@ -202,9 +202,9 @@ class TripController extends Controller
 
 
     public function fetch_material(Request $request){
-        
+
         $records = LRList::where('trip_id',isset($request->id) ? $request->id : 0)->get();
-       
+
         $html = '';
         $i=1;
         foreach($records as $tc){
@@ -212,6 +212,10 @@ class TripController extends Controller
                         <td>'.$i++.'</td>
                         <td>'.$tc->lr_no.'</td>
                         <td>'.$tc->material.'</td>
+                        <td>'.($tc->quantity ?? 0).'</td>
+                        <td>'.($tc->weight ?? 0).' kg</td>
+                        <td>'.$tc->dimensions.'</td>
+                        <td>₹'.number_format($tc->value ?? 0, 2).'</td>
                         <td>'.$tc->details.'</td>
                         <td> <i class="mdi mdi-window-close" onclick="delMaterial('.$tc->id.')"></i></td>
                     </tr>';

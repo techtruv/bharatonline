@@ -2,7 +2,7 @@
 @extends('layouts.app')
 @section('body')
    <!-- Start Content-->
-  <div class="container-fluid">
+  <div class="container">
 
   <!-- start page title -->
                         <div class="row">

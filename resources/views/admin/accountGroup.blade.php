@@ -1,109 +1,86 @@
 @extends('layouts.app')
 @section('body')
+<!-- Start Content -->
+<div class="container-fluid p-2">
 
-<link rel="stylesheet" href="{{ asset('dashboard/assets/css/dashboard-animations.css') }}">
-<link rel="stylesheet" href="{{ asset('dashboard/assets/css/modern-forms.css') }}">
+    <div class="row">
+        <div class="col-12">
+            <x-alert />
 
-<div class="dashboard-container">
-    <div class="container-fluid">
-       
+            <!-- Compact Form Container -->
+            <div class="compact-form-container">
+                <div class="compact-form-header">
+                    <i class="uil-folder me-2"></i>
+                    {{ isset($data) ? 'Update Account Group Information' : 'Add New Account Group' }}
+                </div>
 
-        <!-- Alert Messages -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <x-alert />
-            </div>
-        </div>
+                @if(isset($data))
+                    <form action="{{ route('accountGroup.update', $data->id) }}" method="POST" class="compact-form">
+                        @method('PATCH')
+                @else
+                    <form action="{{ route('accountGroup.store') }}" method="POST" class="compact-form">
+                @endif
+                    @csrf
 
-        <!-- Add/Edit Form Section -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="form-card">
-                    <div class="form-card-header">
-                        <h5 class="form-card-title">
-                            <i class="uil-plus-circle me-2"></i>
-                            {{ isset($data) ? 'Edit Account Group' : 'Add New Account Group' }}
-                        </h5>
-                    </div>
-
-                    <div class="form-card-body">
-                        @if(isset($data))
-                            <form action="{{ route('accountGroup.update', $data->id) }}" method="POST">
-                            @method('PATCH')
-                        @else
-                            <form action="{{ route('accountGroup.store') }}" method="POST">
-                        @endif
-                            @csrf
-
-                            <div class="row g-3">
-                                <!-- Code Field -->
-                                <div class="col-md-4">
-                                    <div class="form-section">
-                                        <label for="code" class="form-label">
-                                            <i class="uil-barcode me-2"></i>
-                                            Code
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control @error('code') is-invalid @enderror" 
-                                            id="code" 
-                                            name="code" 
-                                            placeholder="Enter code (e.g., AG001)"
+                    <!-- Compact Form Table -->
+                    <div class="compact-form-table">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <!-- Row 1: Account Group Information -->
+                                <tr>
+                                    <td class="compact-label">
+                                        <i class="uil-barcode"></i>
+                                        Code <span class="required">*</span>
+                                    </td>
+                                    <td class="compact-field">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm @error('code') is-invalid @enderror"
+                                            id="code"
+                                            name="code"
+                                            placeholder="e.g., AG001"
                                             value="{{ old('code', isset($data->code) ? $data->code : '') }}"
                                             required
                                         >
                                         @error('code')
-                                            <div class="invalid-feedback">
-                                                <i class="uil-info-circle me-1"></i>
-                                                {{ $message }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                    </div>
-                                </div>
-
-                                <!-- Group Name Field -->
-                                <div class="col-md-4">
-                                    <div class="form-section">
-                                        <label for="group_name" class="form-label">
-                                            <i class="uil-folder me-2"></i>
-                                            Group Name
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control @error('group_name') is-invalid @enderror" 
-                                            id="group_name" 
-                                            name="group_name" 
+                                    </td>
+                                    <td class="compact-label">
+                                        <i class="uil-folder"></i>
+                                        Group Name <span class="required">*</span>
+                                    </td>
+                                    <td class="compact-field">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm @error('group_name') is-invalid @enderror"
+                                            id="group_name"
+                                            name="group_name"
                                             placeholder="Enter group name"
                                             value="{{ old('group_name', isset($data->group_name) ? $data->group_name : '') }}"
                                             required
                                         >
                                         @error('group_name')
-                                            <div class="invalid-feedback">
-                                                <i class="uil-info-circle me-1"></i>
-                                                {{ $message }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                    </div>
-                                </div>
+                                    </td>
+                                </tr>
 
-                                <!-- Under Group Select -->
-                                <div class="col-md-4">
-                                    <div class="form-section">
-                                        <label for="under_group_id" class="form-label">
-                                            <i class="uil-sitemap me-2"></i>
-                                            Under Group
-                                            <span class="text-muted">(Optional)</span>
-                                        </label>
-                                        <select 
-                                            class="form-control @error('under_group_id') is-invalid @enderror" 
-                                            id="under_group_id" 
+                                <!-- Row 2: Parent Group -->
+                                <tr>
+                                    <td class="compact-label">
+                                        <i class="uil-sitemap"></i>
+                                        Under Group
+                                    </td>
+                                    <td class="compact-field" colspan="3">
+                                        <select
+                                            class="form-select form-select-sm @error('under_group_id') is-invalid @enderror"
+                                            id="under_group_id"
                                             name="under_group_id"
                                         >
                                             <option value="">-- Select Parent Group --</option>
                                             @foreach($parentGroups as $group)
-                                                <option 
+                                                <option
                                                     value="{{ $group->id }}"
                                                     @if(old('under_group_id', isset($data->under_group_id) ? $data->under_group_id : '') == $group->id) selected @endif
                                                 >
@@ -112,35 +89,38 @@
                                             @endforeach
                                         </select>
                                         @error('under_group_id')
-                                            <div class="invalid-feedback">
-                                                <i class="uil-info-circle me-1"></i>
-                                                {{ $message }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="row g-3 mt-3">
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="uil-check me-1"></i>
-                                        {{ isset($data) ? 'Update Group' : 'Add Group' }}
-                                    </button>
-                                    @if(isset($data))
-                                        <a href="{{ route('accountGroup.index') }}" class="btn btn-secondary">
-                                            <i class="uil-arrow-left me-1"></i>
-                                            Back to List
-                                        </a>
-                                    @endif
-                                </div>
-                            </div>
-                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
+
+                    <!-- Compact Form Actions -->
+                    <div class="d-flex justify-between align-items-center mt-3 pt-2 border-top">
+                        @if(isset($data))
+                            <a href="{{ route('accountGroup.index') }}" class="btn btn-outline-secondary btn-sm">
+                                <i class="uil-arrow-left me-1"></i>Back to List
+                            </a>
+                        @else
+                            <div></div>
+                        @endif
+                        <div class="d-flex gap-2">
+                            <button type="reset" class="btn btn-outline-secondary btn-sm">
+                                <i class="uil-redo me-1"></i>Reset
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="uil-check-circle me-1"></i>{{ isset($data) ? 'Update' : 'Add' }}
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
             </div>
+
         </div>
+    </div>
 
         <!-- Account Groups Table Section -->
         <div class="row">

@@ -73,18 +73,7 @@
             @yield('body')
         </div>
 
-        <!-- Footer Start -->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
-                        <script>document.write(new Date().getFullYear())</script> © Tarachand Patel - +91 9584587577
-                    </div>
-
-                </div>
-            </div>
-        </footer>
-        <!-- end Footer -->
+       
 
         <!-- bundle -->
         <script src="{{ asset('dashboard/assets/js/vendor.min.js') }}"></script>

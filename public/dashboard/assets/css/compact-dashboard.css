@@ -1,0 +1,884 @@
+/* ============================================
+   ATTRACTIVE & ENGAGING COMPACT DASHBOARD
+   Space-optimized with visual appeal
+   ============================================ */
+
+/* Base Compact Styles with Enhanced Typography */
+.compact-dashboard {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    min-height: 100vh;
+}
+
+/* Enhanced Color Palette */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --warning-gradient: linear-gradient(135deg, #fcb045 0%, #fd1d1d 100%);
+    --info-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-light: 0 2px 10px rgba(0,0,0,0.08);
+    --shadow-medium: 0 4px 20px rgba(0,0,0,0.12);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+/* Compact Container */
+.compact-dashboard .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Compact Header */
+.compact-dashboard .dashboard-header {
+    margin-bottom: 1rem;
+    padding: 0.75rem 0;
+}
+
+.compact-dashboard .dashboard-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.compact-dashboard .dashboard-subtitle {
+    font-size: 0.875rem;
+    margin-bottom: 0;
+    opacity: 0.8;
+}
+
+/* Attractive Statistics Cards with Glassmorphism */
+.compact-dashboard .stat-card {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.compact-dashboard .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--primary-gradient);
+    border-radius: 12px 12px 0 0;
+}
+
+.compact-dashboard .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.compact-dashboard .stat-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.compact-dashboard .stat-card-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    opacity: 0.1;
+    border-radius: inherit;
+}
+
+.compact-dashboard .stat-card-icon i {
+    font-size: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.compact-dashboard .stat-card-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+    color: #64748b;
+}
+
+.compact-dashboard .stat-card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.compact-dashboard .stat-card-change {
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.compact-dashboard .stat-card-change.positive {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+}
+
+.compact-dashboard .stat-card-change.negative {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+}
+
+/* Card-specific gradients */
+.compact-dashboard .stat-card:nth-child(1) .stat-card-icon {
+    background: var(--primary-gradient);
+}
+
+.compact-dashboard .stat-card:nth-child(2) .stat-card-icon {
+    background: var(--success-gradient);
+}
+
+.compact-dashboard .stat-card:nth-child(3) .stat-card-icon {
+    background: var(--info-gradient);
+}
+
+.compact-dashboard .stat-card:nth-child(4) .stat-card-icon {
+    background: var(--warning-gradient);
+}
+
+.compact-dashboard .stat-card-change i {
+    font-size: 0.75rem;
+}
+
+/* Attractive Charts Section */
+.compact-dashboard .chart-card {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.compact-dashboard .chart-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+}
+
+.compact-dashboard .chart-header {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.compact-dashboard .chart-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.compact-dashboard .chart-title i {
+    color: #667eea;
+}
+
+.compact-dashboard .chart-actions {
+    display: flex;
+    gap: 0.375rem;
+    background: rgba(255,255,255,0.5);
+    border-radius: 8px;
+    padding: 0.25rem;
+}
+
+.compact-dashboard .chart-action-btn {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.compact-dashboard .chart-action-btn:hover {
+    background: rgba(255,255,255,0.8);
+    color: #334155;
+    transform: translateY(-1px);
+}
+
+.compact-dashboard .chart-action-btn.active {
+    background: var(--primary-gradient);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* Engaging Activity Section */
+.compact-dashboard .activity-card {
+    padding: 1.25rem;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.compact-dashboard .activity-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+}
+
+.compact-dashboard .activity-card h5 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.compact-dashboard .activity-card h5 i {
+    color: #667eea;
+}
+
+.compact-dashboard .activity-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    margin-bottom: 0.25rem;
+}
+
+.compact-dashboard .activity-item:hover {
+    background: rgba(102, 126, 234, 0.02);
+    padding-left: 0.5rem;
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    padding-right: 0.5rem;
+}
+
+.compact-dashboard .activity-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.compact-dashboard .activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.compact-dashboard .activity-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    opacity: 0.2;
+    border-radius: inherit;
+}
+
+.compact-dashboard .activity-icon i {
+    font-size: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.compact-dashboard .activity-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.compact-dashboard .activity-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.compact-dashboard .activity-time {
+    font-size: 0.75rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.compact-dashboard .activity-time::before {
+    content: '🕐';
+    font-size: 0.7rem;
+}
+
+/* Attractive & Engaging Data Table */
+.compact-dashboard .table {
+    font-size: 0.875rem;
+    margin-bottom: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-light);
+}
+
+.compact-dashboard .table th,
+.compact-dashboard .table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+}
+
+.compact-dashboard .table th {
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    color: #475569;
+    border-bottom: 2px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.compact-dashboard .table tbody tr {
+    height: 52px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.compact-dashboard .table tbody tr:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.02) 0%, rgba(118, 75, 162, 0.02) 100%);
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.compact-dashboard .table tbody tr:hover td {
+    border-bottom-color: rgba(102, 126, 234, 0.1);
+}
+
+/* Status badges with gradients */
+.compact-dashboard .badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.375rem 0.625rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.compact-dashboard .badge.bg-success {
+    background: var(--success-gradient) !important;
+    color: white;
+    box-shadow: 0 2px 4px rgba(17, 153, 142, 0.2);
+}
+
+.compact-dashboard .badge.bg-info {
+    background: var(--info-gradient) !important;
+    color: white;
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+}
+
+.compact-dashboard .badge.bg-warning {
+    background: var(--warning-gradient) !important;
+    color: white;
+    box-shadow: 0 2px 4px rgba(252, 176, 69, 0.2);
+}
+
+.compact-dashboard .badge.bg-danger {
+    background: var(--danger-gradient) !important;
+    color: white;
+    box-shadow: 0 2px 4px rgba(255, 107, 107, 0.2);
+}
+
+/* Action buttons styling */
+.compact-dashboard .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.compact-dashboard .btn-group .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Table responsiveness */
+.compact-dashboard .table-responsive {
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+}
+
+/* Compact Form Styles */
+.compact-dashboard .form-control {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    height: calc(1.5em + 0.75rem + 2px);
+    border-radius: 4px;
+}
+
+.compact-dashboard .form-select {
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    height: calc(1.5em + 0.75rem + 2px);
+}
+
+.compact-dashboard .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.compact-dashboard .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* Grid Form Layouts */
+.compact-dashboard .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.compact-dashboard .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.compact-dashboard .form-group {
+    margin-bottom: 0.5rem;
+}
+
+.compact-dashboard .form-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+}
+
+/* Compact Card Components */
+.compact-dashboard .card {
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.compact-dashboard .card-header {
+    padding: 0.75rem 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.compact-dashboard .card-body {
+    padding: 1rem;
+}
+
+.compact-dashboard .card-footer {
+    padding: 0.75rem 1rem;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .compact-dashboard .form-grid,
+    .compact-dashboard .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .compact-dashboard .stat-card {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .compact-dashboard .chart-card,
+    .compact-dashboard .activity-card {
+        padding: 0.75rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .compact-dashboard .container-fluid {
+        max-width: 1400px;
+    }
+
+    .compact-dashboard .form-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .compact-dashboard .form-row {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1600px) {
+    .compact-dashboard .form-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .compact-dashboard .form-row {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* Engaging Animations & Micro-interactions */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+/* Staggered loading animations */
+.compact-dashboard .stat-card {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.compact-dashboard .stat-card:nth-child(1) { animation-delay: 0.1s; }
+.compact-dashboard .stat-card:nth-child(2) { animation-delay: 0.2s; }
+.compact-dashboard .stat-card:nth-child(3) { animation-delay: 0.3s; }
+.compact-dashboard .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+.compact-dashboard .chart-card,
+.compact-dashboard .activity-card {
+    animation: slideInRight 0.6s ease-out forwards;
+}
+
+.compact-dashboard .chart-card { animation-delay: 0.5s; }
+.compact-dashboard .activity-card { animation-delay: 0.6s; }
+
+/* Interactive hover effects */
+.compact-dashboard .stat-card:hover .stat-card-icon {
+    animation: pulse 0.6s ease-in-out;
+}
+
+.compact-dashboard .activity-item:hover .activity-icon {
+    animation: pulse 0.4s ease-in-out;
+}
+
+/* Loading shimmer effect for data */
+.compact-dashboard .loading-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+/* Progress indicators */
+.compact-dashboard .progress-ring {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary-gradient) 0deg, transparent 0deg);
+    mask: radial-gradient(circle at center, transparent 50%, black 52%);
+    -webkit-mask: radial-gradient(circle at center, transparent 50%, black 52%);
+}
+
+/* Notification badges with pulse */
+.compact-dashboard .notification-badge {
+    position: relative;
+}
+
+.compact-dashboard .notification-badge::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background: var(--danger-gradient);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* Performance Optimizations with selective animations */
+.compact-dashboard * {
+    box-sizing: border-box;
+}
+
+.compact-dashboard .stat-card,
+.compact-dashboard .chart-card,
+.compact-dashboard .activity-card,
+.compact-dashboard .card {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Subtle hover effects for engagement */
+.compact-dashboard .stat-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+
+.compact-dashboard .chart-card:hover,
+.compact-dashboard .activity-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+/* Compact Navigation */
+.compact-dashboard .navbar-custom {
+    min-height: 60px;
+    padding: 0 1rem;
+}
+
+.compact-dashboard .navbar-custom .navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Compact Sidebar */
+.compact-dashboard .leftside-menu {
+    width: 240px;
+}
+
+.compact-dashboard .side-nav .side-nav-link {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+}
+
+/* Avatar Styles for User Engagement */
+.compact-dashboard .avatar-xs {
+    width: 24px;
+    height: 24px;
+}
+
+.compact-dashboard .avatar-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Enhanced Button Styles */
+.compact-dashboard .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.compact-dashboard .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.compact-dashboard .btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Progress Bar Enhancements */
+.compact-dashboard .progress {
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+.compact-dashboard .progress-bar {
+    background: var(--primary-gradient) !important;
+    transition: width 0.8s ease;
+}
+
+/* Input Group Enhancements */
+.compact-dashboard .input-group-text {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+}
+
+/* Card Footer Enhancements */
+.compact-dashboard .card-footer {
+    background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.8) 100%);
+    border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Notification Badge Animation */
+@keyframes notification-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+.compact-dashboard .notification-badge {
+    animation: notification-pulse 2s infinite;
+    background: var(--danger-gradient) !important;
+    color: white !important;
+    border-radius: 50%;
+    padding: 0.125rem 0.375rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* Enhanced Table Row Hover Effects */
+.compact-dashboard .table tbody tr {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.compact-dashboard .table tbody tr:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Utility Classes */
+.compact-dashboard .text-compact {
+    font-size: 0.75rem;
+    line-height: 1.3;
+}
+
+.compact-dashboard .spacing-compact {
+    margin-bottom: 0.5rem;
+}
+
+.compact-dashboard .padding-compact {
+    padding: 0.5rem;
+}
+
+/* Welcome Message Styling */
+.compact-dashboard .dashboard-header h1 {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+/* Enhanced Glass Effect */
+.compact-dashboard .glass-effect {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Loading States */
+.compact-dashboard .skeleton-loader {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Success/Error States */
+.compact-dashboard .status-success {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.compact-dashboard .status-warning {
+    color: #ca8a04;
+    font-weight: 600;
+}
+
+.compact-dashboard .status-danger {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.compact-dashboard .status-info {
+    color: #2563eb;
+    font-weight: 600;
+}
