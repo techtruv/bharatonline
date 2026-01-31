@@ -12,11 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // First update existing records to valid values
+        // First add the new enum values to the column
+        DB::statement("ALTER TABLE ledger_masters MODIFY COLUMN balance_type ENUM('Debit', 'Credit', 'Bill by Bill', 'On Account') DEFAULT 'Bill by Bill'");
+
+        // Then update existing records to valid values
         DB::statement("UPDATE ledger_masters SET balance_type = 'Bill by Bill' WHERE balance_type = 'Debit'");
         DB::statement("UPDATE ledger_masters SET balance_type = 'On Account' WHERE balance_type = 'Credit'");
 
-        // Then change the enum
+        // Finally, remove the old enum values
         DB::statement("ALTER TABLE ledger_masters MODIFY COLUMN balance_type ENUM('Bill by Bill', 'On Account') DEFAULT 'Bill by Bill'");
     }
 

@@ -142,8 +142,7 @@
                                     <option value="{{ $session->id }}" 
                                         {{ old('session_id') == $session->id ? 'selected' : '' }}>
                                         {{ $session->session_name }} 
-                                        ({{ date('M d, Y', strtotime($session->from_date)) }} - {{ date('M d, Y', strtotime($session->to_date)) }})
-                                    </option>
+                                      </option>
                                 @endforeach
                             @else
                                 <option value="" disabled>No sessions available</option>

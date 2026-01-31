@@ -167,9 +167,16 @@ class AdminController extends Controller
 
      public function logout()
     {
-        Session::forget('id');
+        Session::forget(['id', 'user_id', 'user_email', 'session_id', 'session_name', 'session_from', 'session_to', 'login_time']);
+        
+        // Logout the authenticated user
+        Auth::logout();
+        
+        // Invalidate and regenerate session for security
+        session()->invalidate();
+        session()->regenerateToken();
+        
         return redirect(route('login'));
-
     }
 
 
