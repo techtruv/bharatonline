@@ -10,31 +10,44 @@ $(document).ready(function() {
 // Start save_material
 
 function save_material(){
-       
+
     var lrNo = $("#lrNo").val();
     var lr_table_id = $("#lr_table_id").val();
     var materialName = $("#materialName").val();
     var note = $("#note").val();
+    var quantity = $('input[name="quantity"]').val();
+    var weight = $('input[name="weight"]').val();
+    var dimensions = $('input[name="dimensions"]').val();
+    var value = $('input[name="value"]').val();
+
     if(lrNo ==''){
-        alert('Please LR No fill');
+        alert('Please fill LR No');
+        return;
     }
 
     if(materialName ==''){
-        alert('Please Material Name Fill');
+        alert('Please fill Material Name');
+        return;
     }
 
   $.ajax({
   type:'GET',
-  url:'{{ url("save_material") }}?lr_no='+lrNo+'&id='+lr_table_id+'&material='+materialName+'&details='+note,
+  url:'{{ url("save_material") }}?lr_no='+lrNo+'&id='+lr_table_id+'&material='+materialName+'&details='+note+'&quantity='+quantity+'&weight='+weight+'&dimensions='+dimensions+'&value='+value,
   success:function(response){
     fetchMaterial();
       $("#lrNo").val('');
       $("#lr_table_id").val('');
-      $('#materialName').val(''); 
-      $('#note').val(''); 
+      $('#materialName').val('');
+      $('#note').val('');
+      $('input[name="quantity"]').val('');
+      $('input[name="weight"]').val('');
+      $('input[name="dimensions"]').val('');
+      $('input[name="value"]').val('');
+      // Update totals after adding material
+      updateMaterialTotals();
   }
   });
-}   
+}
 
 // End save_material
 // Fetch save_material

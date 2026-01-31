@@ -4,108 +4,87 @@ use App\Http\Controllers\AdminController;
 @extends('layouts.app')
 @section('body')
 <!-- Start Content -->
-<div class="container-fluid">
-
-    <!-- Start Page Title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <h4 class="page-title">
-                    <i class="uil-building"></i>
-                    {{ isset($data) ? 'Edit Bank' : 'Add New Bank' }}
-                </h4>
-            </div>
-        </div>
-    </div>
-    <!-- End Page Title -->
+<div class="container-fluid p-2">
 
     <div class="row">
         <div class="col-12">
-            <!-- Form Card -->
-            <div class="form-card">
-                <div class="form-card-header">
-                    <i class="uil-plus-circle"></i>
+            <x-alert />
+
+            <!-- Compact Form Container -->
+            <div class="compact-form-container">
+                <div class="compact-form-header">
+                    <i class="uil-building me-2"></i>
                     {{ isset($data) ? 'Update Bank Information' : 'Add New Bank' }}
                 </div>
 
-                <div class="form-card-body">
-                    <x-alert />
+                @if(isset($data))
+                    <form action="{{ route('bank.update',$data->id) }}" method="post" class="compact-form">
+                        @method('PATCH')
+                @else
+                    <form action="{{ route('bank.store') }}" method="post" class="compact-form">
+                @endif
+                    @csrf
 
-                    @if(isset($data))
-                        <form action="{{ route('bank.update',$data->id) }}" method="post" id="bankForm">
-                            @method('PATCH')
-                    @else
-                        <form action="{{ route('bank.store') }}" method="post" id="bankForm">
-                    @endif
-                        @csrf
-
-                        <!-- Bank Information Section -->
-                        <div class="form-section">
-                            <div class="form-section-title">
-                                <i class="uil-building"></i>
-                                Bank Details
-                            </div>
-
-                            <div class="row g-2">
-                                <div class="col-md-3">
-                                    <div class="form-group mb-3">
-                                        <label for="code" class="form-label">
-                                            <i class="uil-file-text"></i>
-                                            Bank Code <span class="required">*</span>
-                                        </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}" 
-                                            name="code" 
+                    <!-- Compact Form Table -->
+                    <div class="compact-form-table">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <!-- Row 1: Bank Information -->
+                                <tr>
+                                    <td class="compact-label">
+                                        <i class="uil-file-text"></i>
+                                        Bank Code <span class="required">*</span>
+                                    </td>
+                                    <td class="compact-field">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm {{ $errors->has('code') ? 'is-invalid' : '' }}"
+                                            name="code"
                                             id="code"
                                             placeholder="Enter bank code"
                                             value="{{ old('code', isset($data->code) ? $data->code : '') }}"
                                             required
                                         >
                                         @if($errors->has('code'))
-                                            <div class="invalid-feedback d-block">
-                                                {{ $errors->first('code') }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $errors->first('code') }}</div>
                                         @endif
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group mb-3">
-                                        <label for="name" class="form-label">
-                                            <i class="uil-file-text"></i>
-                                            Bank Name <span class="required">*</span>
-                                        </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" 
-                                            name="name" 
+                                    </td>
+                                    <td class="compact-label">
+                                        <i class="uil-file-text"></i>
+                                        Bank Name <span class="required">*</span>
+                                    </td>
+                                    <td class="compact-field">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                            name="name"
                                             id="name"
                                             placeholder="Enter bank name"
                                             value="{{ old('name', isset($data->name) ? $data->name : '') }}"
                                             required
                                         >
                                         @if($errors->has('name'))
-                                            <div class="invalid-feedback d-block">
-                                                {{ $errors->first('name') }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $errors->first('name') }}</div>
                                         @endif
-                                    </div>
-                                </div>
-                            </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Compact Form Actions -->
+                    <div class="d-flex justify-between align-items-center mt-3 pt-2 border-top">
+                        <div class="d-flex gap-2">
+                            <button type="reset" class="btn btn-outline-secondary btn-sm">
+                                <i class="uil-redo me-1"></i>Reset
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="uil-check-circle me-1"></i>{{ isset($data) ? 'Update' : 'Add' }}
+                            </button>
                         </div>
+                    </div>
 
-                    </form>
-                </div>
-
-                <!-- Form Actions -->
-                <div class="form-card-footer">
-                    <button type="reset" form="bankForm" class="btn btn-outline-secondary">
-                        <i class="uil-redo"></i> Reset
-                    </button>
-                    <button type="submit" form="bankForm" class="btn btn-primary">
-                        <i class="uil-check-circle"></i> {{ isset($data) ? 'Update Bank' : 'Add Bank' }}
-                    </button>
-                </div>
+                </form>
             </div>
 
         </div>

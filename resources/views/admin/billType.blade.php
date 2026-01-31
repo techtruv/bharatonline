@@ -5,86 +5,69 @@ use App\Http\Controllers\AdminController;
 @extends('layouts.app')
 @section('body')
 <!-- Start Content -->
-<div class="container-fluid">
-
-    <!-- Start Page Title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <h4 class="page-title">
-                    <i class="uil-receipt"></i>
-                    {{ isset($data) ? 'Edit Billing Type' : 'Add New Billing Type' }}
-                </h4>
-            </div>
-        </div>
-    </div>
-    <!-- End Page Title -->
+<div class="container-fluid p-2">
 
     <div class="row">
         <div class="col-12">
-            <!-- Form Card -->
-            <div class="form-card">
-                <div class="form-card-header">
-                    <i class="uil-plus-circle"></i>
+            <x-alert />
+
+            <!-- Compact Form Container -->
+            <div class="compact-form-container">
+                <div class="compact-form-header">
+                    <i class="uil-receipt me-2"></i>
                     {{ isset($data) ? 'Update Billing Type Information' : 'Add New Billing Type' }}
                 </div>
 
-                <div class="form-card-body">
-                    <x-alert />
+                @if(isset($data))
+                    <form action="{{ route('billType.update',$data->id) }}" method="post" class="compact-form">
+                        @method('PATCH')
+                @else
+                    <form action="{{ route('billType.store') }}" method="post" class="compact-form">
+                @endif
+                    @csrf
 
-                    @if(isset($data))
-                        <form action="{{ route('billType.update',$data->id) }}" method="post" id="billTypeForm">
-                            @method('PATCH')
-                    @else
-                        <form action="{{ route('billType.store') }}" method="post" id="billTypeForm">
-                    @endif
-                        @csrf
-
-                        <!-- Billing Type Information Section -->
-                        <div class="form-section">
-                            <div class="form-section-title">
-                                <i class="uil-receipt"></i>
-                                Billing Type Details
-                            </div>
-
-                            <div class="row g-2">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="name" class="form-label">
-                                            <i class="uil-file-text"></i>
-                                            Billing Type Name <span class="required">*</span>
-                                        </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" 
-                                            name="name" 
+                    <!-- Compact Form Table -->
+                    <div class="compact-form-table">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <!-- Row 1: Billing Type Information -->
+                                <tr>
+                                    <td class="compact-label">
+                                        <i class="uil-file-text"></i>
+                                        Billing Type Name <span class="required">*</span>
+                                    </td>
+                                    <td class="compact-field" colspan="3">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                            name="name"
                                             id="name"
                                             placeholder="Enter billing type name"
                                             value="{{ old('name', isset($data->name) ? $data->name : '') }}"
                                             required
                                         >
                                         @if($errors->has('name'))
-                                            <div class="invalid-feedback d-block">
-                                                {{ $errors->first('name') }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $errors->first('name') }}</div>
                                         @endif
-                                    </div>
-                                </div>
-                            </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Compact Form Actions -->
+                    <div class="d-flex justify-between align-items-center mt-3 pt-2 border-top">
+                        <div class="d-flex gap-2">
+                            <button type="reset" class="btn btn-outline-secondary btn-sm">
+                                <i class="uil-redo me-1"></i>Reset
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="uil-check-circle me-1"></i>{{ isset($data) ? 'Update' : 'Add' }}
+                            </button>
                         </div>
+                    </div>
 
-                    </form>
-                </div>
-
-                <!-- Form Actions -->
-                <div class="form-card-footer">
-                    <button type="reset" form="billTypeForm" class="btn btn-outline-secondary">
-                        <i class="uil-redo"></i> Reset
-                    </button>
-                    <button type="submit" form="billTypeForm" class="btn btn-primary">
-                        <i class="uil-check-circle"></i> {{ isset($data) ? 'Update Billing Type' : 'Add Billing Type' }}
-                    </button>
-                </div>
+                </form>
             </div>
 
         </div>

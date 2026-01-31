@@ -4,125 +4,99 @@ use App\Http\Controllers\AdminController;
 @extends('layouts.app')
 @section('body')
 <!-- Start Content -->
-<div class="container-fluid">
-
-    <!-- Start Page Title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <h4 class="page-title">
-                    <i class="uil-tag"></i>
-                    {{ isset($data) ? 'Edit Category' : 'Add New Category' }}
-                </h4>
-            </div>
-        </div>
-    </div>
-    <!-- End Page Title -->
+<div class="container-fluid p-2">
 
     <div class="row">
         <div class="col-12">
-            <!-- Form Card -->
-            <div class="form-card">
-                <div class="form-card-header">
-                    <i class="uil-plus-circle"></i>
+            <x-alert />
+
+            <!-- Compact Form Container -->
+            <div class="compact-form-container">
+                <div class="compact-form-header">
+                    <i class="uil-tag me-2"></i>
                     {{ isset($data) ? 'Update Category Information' : 'Add New Category' }}
                 </div>
 
-                <div class="form-card-body">
-                    <x-alert />
+                @if(isset($data))
+                    <form action="{{ route('category.update',$data->id) }}" method="post" class="compact-form">
+                        @method('PATCH')
+                @else
+                    <form action="{{ route('category.store') }}" method="post" class="compact-form">
+                @endif
+                    @csrf
 
-                    @if(isset($data))
-                        <form action="{{ route('category.update',$data->id) }}" method="post" id="categoryForm">
-                            @method('PATCH')
-                    @else
-                        <form action="{{ route('category.store') }}" method="post" id="categoryForm">
-                    @endif
-                        @csrf
-
-                        <!-- Category Information Section -->
-                        <div class="form-section">
-                            <div class="form-section-title">
-                                <i class="uil-tag"></i>
-                                Category Details
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group mb-3">
-                                        <label for="category" class="form-label">
-                                            <i class="uil-file-text"></i>
-                                            Category <span class="required">*</span>
-                                        </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control {{ $errors->has('category') ? 'is-invalid' : '' }}" 
-                                            name="category" 
+                    <!-- Compact Form Table -->
+                    <div class="compact-form-table">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <!-- Row 1: Category Information -->
+                                <tr>
+                                    <td class="compact-label">
+                                        <i class="uil-file-text"></i>
+                                        Category <span class="required">*</span>
+                                    </td>
+                                    <td class="compact-field">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm {{ $errors->has('category') ? 'is-invalid' : '' }}"
+                                            name="category"
                                             id="category"
                                             placeholder="Enter category name"
                                             value="{{ old('category', isset($data->category) ? $data->category : '') }}"
                                             required
                                         >
                                         @if($errors->has('category'))
-                                            <div class="invalid-feedback d-block">
-                                                {{ $errors->first('category') }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $errors->first('category') }}</div>
                                         @endif
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group mb-3">
-                                        <label for="weight" class="form-label">
-                                            <i class="uil-weight"></i>
-                                            Weight <span class="optional">(Optional)</span>
-                                        </label>
-                                        <input 
-                                            type="number" 
-                                            class="form-control {{ $errors->has('weight') ? 'is-invalid' : '' }}" 
-                                            name="weight" 
+                                    </td>
+                                    <td class="compact-label">
+                                        <i class="uil-weight"></i>
+                                        Weight
+                                    </td>
+                                    <td class="compact-field">
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm {{ $errors->has('weight') ? 'is-invalid' : '' }}"
+                                            name="weight"
                                             id="weight"
-                                            placeholder="Enter weight"
+                                            placeholder="0.00"
                                             step="0.01"
                                             min="0"
                                             value="{{ old('weight', isset($data->weight) ? $data->weight : '') }}"
                                         >
                                         @if($errors->has('weight'))
-                                            <div class="invalid-feedback d-block">
-                                                {{ $errors->first('weight') }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $errors->first('weight') }}</div>
                                         @endif
-                                    </div>
-                                </div>
-                           
-                                <div class="col-md-3">
-                                    <div class="form-group mb-3">
-                                        <label for="hsn_code" class="form-label">
-                                            <i class="uil-barcode"></i>
-                                            HSN Code <span class="optional">(Optional)</span>
-                                        </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control {{ $errors->has('hsn_code') ? 'is-invalid' : '' }}" 
-                                            name="hsn_code" 
+                                    </td>
+                                </tr>
+
+                                <!-- Row 2: HSN and Unit -->
+                                <tr>
+                                    <td class="compact-label">
+                                        <i class="uil-barcode"></i>
+                                        HSN Code
+                                    </td>
+                                    <td class="compact-field">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm {{ $errors->has('hsn_code') ? 'is-invalid' : '' }}"
+                                            name="hsn_code"
                                             id="hsn_code"
                                             placeholder="Enter HSN code"
                                             value="{{ old('hsn_code', isset($data->hsn_code) ? $data->hsn_code : '') }}"
                                         >
                                         @if($errors->has('hsn_code'))
-                                            <div class="invalid-feedback d-block">
-                                                {{ $errors->first('hsn_code') }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $errors->first('hsn_code') }}</div>
                                         @endif
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group mb-3">
-                                        <label for="unit_id" class="form-label">
-                                            <i class="uil-box"></i>
-                                            Unit <span class="optional">(Optional)</span>
-                                        </label>
-                                        <select 
-                                            class="form-control {{ $errors->has('unit_id') ? 'is-invalid' : '' }}" 
-                                            name="unit_id" 
+                                    </td>
+                                    <td class="compact-label">
+                                        <i class="uil-box"></i>
+                                        Unit
+                                    </td>
+                                    <td class="compact-field">
+                                        <select
+                                            class="form-select form-select-sm {{ $errors->has('unit_id') ? 'is-invalid' : '' }}"
+                                            name="unit_id"
                                             id="unit_id"
                                         >
                                             <option value="">-- Select Unit --</option>
@@ -133,27 +107,27 @@ use App\Http\Controllers\AdminController;
                                             @endforeach
                                         </select>
                                         @if($errors->has('unit_id'))
-                                            <div class="invalid-feedback d-block">
-                                                {{ $errors->first('unit_id') }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $errors->first('unit_id') }}</div>
                                         @endif
-                                    </div>
-                                </div>
-                            </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Compact Form Actions -->
+                    <div class="d-flex justify-between align-items-center mt-3 pt-2 border-top">
+                        <div class="d-flex gap-2">
+                            <button type="reset" class="btn btn-outline-secondary btn-sm">
+                                <i class="uil-redo me-1"></i>Reset
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="uil-check-circle me-1"></i>{{ isset($data) ? 'Update' : 'Add' }}
+                            </button>
                         </div>
+                    </div>
 
-                    </form>
-                </div>
-
-                <!-- Form Actions -->
-                <div class="form-card-footer">
-                    <button type="reset" form="categoryForm" class="btn btn-outline-secondary">
-                        <i class="uil-redo"></i> Reset
-                    </button>
-                    <button type="submit" form="categoryForm" class="btn btn-primary">
-                        <i class="uil-check-circle"></i> {{ isset($data) ? 'Update Category' : 'Add Category' }}
-                    </button>
-                </div>
+                </form>
             </div>
 
         </div>

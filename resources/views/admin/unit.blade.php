@@ -4,107 +4,85 @@ use App\Http\Controllers\AdminController;
 @extends('layouts.app')
 @section('body')
 <!-- Start Content -->
-<div class="container-fluid">
-
-    <!-- Start Page Title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <h4 class="page-title">
-                    <i class="uil-box"></i>
-                    {{ isset($data) ? 'Edit Unit' : 'Add New Unit' }}
-                </h4>
-            </div>
-        </div>
-    </div>
-    <!-- End Page Title -->
+<div class="container-fluid p-2">
 
     <div class="row">
         <div class="col-12">
-            <!-- Form Card -->
-            <div class="form-card">
-                <div class="form-card-header">
-                    <i class="uil-plus-circle"></i>
+            <x-alert />
+
+            <!-- Compact Form Container -->
+            <div class="compact-form-container">
+                <div class="compact-form-header">
+                    <i class="uil-box me-2"></i>
                     {{ isset($data) ? 'Update Unit Information' : 'Add New Unit' }}
                 </div>
 
-                <div class="form-card-body">
-                    <x-alert />
+                @if(isset($data))
+                    <form action="{{ route('unit.update',$data->id) }}" method="post" class="compact-form">
+                        @method('PATCH')
+                @else
+                    <form action="{{ route('unit.store') }}" method="post" class="compact-form">
+                @endif
+                    @csrf
 
-                    @if(isset($data))
-                        <form action="{{ route('unit.update',$data->id) }}" method="post" id="unitForm">
-                            @method('PATCH')
-                    @else
-                        <form action="{{ route('unit.store') }}" method="post" id="unitForm">
-                    @endif
-                        @csrf
-
-                        <!-- Unit Information Section -->
-                        <div class="form-section">
-                            <div class="form-section-title">
-                                <i class="uil-box"></i>
-                                Unit Details
-                            </div>
-
-                            <div class="row g-2">
-                                <div class="col-md-4">
-                                    <div class="form-group mb-3">
-                                        <label for="name" class="form-label">
-                                            <i class="uil-file-text"></i>
-                                            Unit Name <span class="required">*</span>
-                                        </label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" 
-                                            name="name" 
+                    <!-- Compact Form Table -->
+                    <div class="compact-form-table">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <!-- Row 1: Unit Information -->
+                                <tr>
+                                    <td class="compact-label">
+                                        <i class="uil-file-text"></i>
+                                        Unit Name <span class="required">*</span>
+                                    </td>
+                                    <td class="compact-field">
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                            name="name"
                                             id="name"
-                                            placeholder="Enter unit name (e.g., KG, Liter, Piece)"
+                                            placeholder="e.g., KG, Liter, Piece"
                                             value="{{ old('name', isset($data->name) ? $data->name : '') }}"
                                             required
                                         >
                                         @if($errors->has('name'))
-                                            <div class="invalid-feedback d-block">
-                                                {{ $errors->first('name') }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $errors->first('name') }}</div>
                                         @endif
-                                    </div>
-                                </div>
-                            
-                                <div class="col-md-4">
-                                    <div class="form-group mb-3">
-                                        <label for="description" class="form-label">
-                                            <i class="uil-file-text"></i>
-                                            Description <span class="optional">(Optional)</span>
-                                        </label>
-                                        <textarea 
-                                            class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" 
-                                            name="description" 
+                                    </td>
+                                    <td class="compact-label">
+                                        <i class="uil-file-text"></i>
+                                        Description
+                                    </td>
+                                    <td class="compact-field" colspan="3">
+                                        <textarea
+                                            class="form-control form-control-sm {{ $errors->has('description') ? 'is-invalid' : '' }}"
+                                            name="description"
                                             id="description"
                                             placeholder="Enter unit description"
-                                            rows="4"
+                                            rows="2"
                                         >{{ old('description', isset($data->description) ? $data->description : '') }}</textarea>
                                         @if($errors->has('description'))
-                                            <div class="invalid-feedback d-block">
-                                                {{ $errors->first('description') }}
-                                            </div>
+                                            <div class="invalid-feedback">{{ $errors->first('description') }}</div>
                                         @endif
-                                    </div>
-                                </div>
-                            </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Compact Form Actions -->
+                    <div class="d-flex justify-between align-items-center mt-3 pt-2 border-top">
+                        <div class="d-flex gap-2">
+                            <button type="reset" class="btn btn-outline-secondary btn-sm">
+                                <i class="uil-redo me-1"></i>Reset
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="uil-check-circle me-1"></i>{{ isset($data) ? 'Update' : 'Add' }}
+                            </button>
                         </div>
+                    </div>
 
-                    </form>
-                </div>
-
-                <!-- Form Actions -->
-                <div class="form-card-footer">
-                    <button type="reset" form="unitForm" class="btn btn-outline-secondary">
-                        <i class="uil-redo"></i> Reset
-                    </button>
-                    <button type="submit" form="unitForm" class="btn btn-primary">
-                        <i class="uil-check-circle"></i> {{ isset($data) ? 'Update Unit' : 'Add Unit' }}
-                    </button>
-                </div>
+                </form>
             </div>
 
         </div>
