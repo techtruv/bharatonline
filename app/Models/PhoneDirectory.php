@@ -5,22 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Party extends Model
+class PhoneDirectory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'partyName',
-        'type',
+        'name',
         'address',
         'phone_no',
-        'mobile',
         'mobile_no',
-        'contact_person_name',
-        'contact_mobile_number',
-        'tin_no',
-        'gst_no',
-        'email',
-        'is_party'
+        'mobile_no1',
+        'mobile_no2',
+        'gst_no'
     ];
 }
